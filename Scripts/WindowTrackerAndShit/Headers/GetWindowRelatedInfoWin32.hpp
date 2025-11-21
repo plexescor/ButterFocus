@@ -2,4 +2,4 @@
 
 //Get current Window declaration
 
-void getCurrentWindow();
+std::string getCurrentWindow();
