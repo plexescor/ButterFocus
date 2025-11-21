@@ -65,8 +65,8 @@ That’s all for now. Everything else is upcoming. But don’t underestimate thi
 1. Launch **FocusFlow.exe**.
 2. It silently runs in the background (Terminal).
 3. Using **Win32 API hooks**, it logs the active window and counts switches.
-4. Data is saved **locally**, in a lightweight format, ready for future visualizations or exports.
-5. Stay focused while FocusFlow quietly monitors your workflow.
+4. Stay focused while FocusFlow quietly monitors your workflow.
+
 
 Think of it as a **microscope for attention** – raw, precise, and unobtrusive.
 
