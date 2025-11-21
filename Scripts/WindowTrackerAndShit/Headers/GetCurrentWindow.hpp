@@ -1,5 +1,5 @@
 #pragma once
 
-//Get current Window declaration
+#include <string>
 
 std::string getCurrentWindow();
