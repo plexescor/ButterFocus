@@ -1,5 +1,5 @@
 #include <iostream>
-#include "WindowTrackerAndShit/Headers/GetWindowRelatedInfoWin32.h"
+#include "WindowTrackerAndShit/Headers/GetWindowRelatedInfoWin32.hpp"
 
 int main()
 {
