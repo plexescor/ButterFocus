@@ -23,7 +23,16 @@ if exist build (
     echo   Running.... 
     echo ===========================
 
-    cd Debug/
-    ViraChrono.exe
+    cd ..
+    cd compiled
+    if exist Debug (
+        cd Debug
+        ViraChrono.exe
+    )
+    if exist Release (
+        cd Release
+        ViraChrono.exe
+    )
+
 
 )

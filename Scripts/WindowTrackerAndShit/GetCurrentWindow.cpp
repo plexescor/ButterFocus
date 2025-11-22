@@ -1,44 +1,42 @@
-#include <Windows.h>
-#include "Headers/GetCurrentWindow.hpp"
+#include <string>
+#include <future>
+#include <cstdio>
+#include <chrono>
 
 // -------------------------------------------------------
 // WINDOWS IMPLEMENTATION
 // -------------------------------------------------------
-
 std::string getCurrentWindow()
 {
-    HWND currWindow = GetForegroundWindow(); // get focused window
-    if (!currWindow) return "";               // nothing focused
+    // Launch ActiveWindowHelper.exe asynchronously
+    auto futureResult = std::async(std::launch::async, []() -> std::string {
+        FILE* pipe = _popen("ActiveWindowHelper.exe", "r"); // spawn the helper
+        if (!pipe) return "";                               // if pipe failed, return empty
 
-    DWORD pid = 0; //GEtting pid for the currWindow
-    GetWindowThreadProcessId(currWindow, &pid);
-    if (pid == 0) return "";
+        char buffer[256];
+        std::string output;
 
-    //Get the handle for the above pid
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
-    if (!hProcess) return "";                // cannot open, skip
+        while (fgets(buffer, sizeof(buffer), pipe) != nullptr)
+        {
+            output += buffer;                                // append every line
+        }
 
-    //Make a buffer for the full path of exe
-    char fullPath[MAX_PATH] = {0};
-    DWORD size = MAX_PATH;
+        _pclose(pipe);                                      // close safely
 
-    // Query full executable path, fail silently if blocked
-    if (QueryFullProcessImageNameA(hProcess, 0, fullPath, &size) == 0)
+        // Everything before the | character
+        size_t pos = output.find('|');
+        if (pos == std::string::npos)
+            return output;                                  // no |, return full string
+        return output.substr(0, pos);                       // return before |
+    });
+
+    // Wait max 3 seconds for result
+    if (futureResult.wait_for(std::chrono::seconds(3)) == std::future_status::ready)
     {
-        CloseHandle(hProcess);
-        return "";
+        return futureResult.get();                          // got the value
     }
-
-    CloseHandle(hProcess); //Close safely, prevents weird behaviour
-
-    std::string pathStr(fullPath); //initialize pathStr with the full path
-    size_t pos = pathStr.find_last_of("\\/"); //Find last /
-    std::string exeName = (pos != std::string::npos) ? pathStr.substr(pos + 1) : pathStr; //Get everything AFTER the slash
-
-    // strip extension, find the dot
-    size_t dotPos = exeName.find_last_of(".");
-    //Get everything before the exe
-    std::string baseName = (dotPos != std::string::npos) ? exeName.substr(0, dotPos) : exeName;
-
-    return baseName;
+    else
+    {
+        return "";                                         // timed out, skip
+    }
 }

@@ -19,7 +19,7 @@ Let’s be honest: most “productivity tools” lie. They’re either bloated f
 
 **ViraChrono is different.**
 
-It’s built in **pure C++**, runs quietly in the background, and **tracks exactly what you do** on your computer: which windows are active and how often you switch between them. That’s it. Simple. Efficient. Brutally honest.
+It’s built in **C++ and C#**, runs quietly in the background, and **tracks exactly what you do** on your computer: which windows are active and how often you switch between them. That’s it. Simple. Efficient. Brutally honest.
 
 No cloud. No accounts. No analytics. Just your raw productivity data stored **locally**. You own it, you control it.
 
@@ -52,6 +52,7 @@ That’s all for now. Everything else is upcoming. But don’t underestimate thi
 ## Tech Stack That Flexes 💪
 
 * **C++** – Pure, compiled power for performance and efficiency.
+* **C#** – For stable Win32 API calls.
 * **Win32 API** – Precise system-level tracking of active windows and task switches.
 * **SDL2** – Lightweight GUI foundation for future visualizations.
 * **CMake** – Clean, reproducible builds for cross-platform expansion.
@@ -85,10 +86,11 @@ ViraChrono is for those who **want control over their digital self**, without sa
 
 ## Getting Started ⚡
 
+***WINDOWS**
+[YOU NEED .NET SDK TO COMPILE C# FILES AND G++(OR MSVC), BUT MSVC PREFERRED]
 1. Clone the repo.
-2. Configure the build using **CMake**.
-3. Compile with your preferred C++ compiler (MSVC recommended on Windows).
-4. Run **ViraChrono.exe**.
+2. Run **"rebuild.bat"**
+4. Run **compiled/ViraChrono.exe**.
 
 That’s it. ViraChrono will start logging active windows and switches silently, letting you focus on **what you actually do**.
 
@@ -99,7 +101,7 @@ That’s it. ViraChrono will start logging active windows and switches silently,
 ## Notes for Hardcore Devs 💻
 
 * Minimal dependencies: **SDL2 + Win32 API** only.
-* Pure **native C++** codebase.
+* Only **C#** and **C++** Codebase.
 * Designed for ultra-low resource usage without sacrificing functionality.
 * Current implementation is **fully functional** as a core focus tracker.
 

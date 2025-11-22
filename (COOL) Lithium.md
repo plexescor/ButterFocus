@@ -52,7 +52,7 @@ It doesn’t tell you what to do. It doesn’t nag, it doesn’t guilt-trip. It 
 
 ## For the Devs Who Dare 💻
 
-If you are reading this, you are likely a coder, a tinkerer, a performance freak. You know the difference between **pure C++ efficiency** and bloated frameworks. You appreciate:
+If you are reading this, you are likely a coder, a tinkerer, a performance freak. You know the difference between **pure C++ efficiency and c# speed** and bloated frameworks. You appreciate:
 
 * **Win32 API precision** – hooks that know exactly which window is active.
 * **SDL2 GUI foundation** – lightweight, fast, ready for visualizations.

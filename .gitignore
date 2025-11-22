@@ -5,6 +5,7 @@
 
 # Executables
 *.exe
+*.pdb
 *.obj
 *.o
 *.a
