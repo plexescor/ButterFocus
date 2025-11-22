@@ -2,6 +2,8 @@
 /build/
 /bin/
 /out/
+/external/imgui/
+/external/SDL2/
 
 # Executables
 *.exe
