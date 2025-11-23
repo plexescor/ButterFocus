@@ -1,6 +1,8 @@
 #include <iostream>
 #include <thread>
 #include <future>
+#include <mutex>
+#include <atomic>
 #include <chrono>
 
 #include "WindowTrackerAndShit/Headers/GetCurrentWindow.hpp"
@@ -8,10 +10,52 @@
 
 // Conditional compilation for Windows-specific code
 #ifdef _WIN32
+
+    std::mutex mtx;
+    std::string prevWindow;
+    std::string sharedWindow;
+    std::atomic<bool> quit(false);
+
+    void WindowWorker()
+    {
+        while (!quit)
+        {
+            std::string window = getCurrentWindow();
+            if (!window.empty() 
+            && window.find_first_not_of(' ') != std::string::npos
+            && window != "SearchApp" 
+            && window != "explorer"
+            && window != prevWindow)
+            {
+                std::lock_guard<std::mutex> lock(mtx);
+                sharedWindow = window;
+                prevWindow = window;
+            }          
+            std::this_thread::sleep_for(std::chrono::milliseconds(300)); 
+        }
+    }
+    
     int main()
     {
-        createWindow(getCurrentWindow());
-        return 0;
+        std::thread worker(WindowWorker);
+        
+        std::string lastPrintedWindow;
+
+        while (true) 
+        {
+            std::string current;
+            {
+                std::lock_guard<std::mutex> lock(mtx);
+                current = sharedWindow;
+            }
+
+            if (!current.empty() && current != lastPrintedWindow) {
+                std::cout << "Current window: " << current << std::endl;
+                lastPrintedWindow = current;
+            }
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        }
     }
 
 

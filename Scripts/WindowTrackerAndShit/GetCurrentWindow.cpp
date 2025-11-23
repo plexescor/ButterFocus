@@ -2,6 +2,7 @@
 #include <future>
 #include <cstdio>
 #include <chrono>
+#include <cctype> // for isalpha
 
 // -------------------------------------------------------
 // WINDOWS IMPLEMENTATION
@@ -26,9 +27,27 @@ std::string getCurrentWindow()
 
         // Everything before the | character
         size_t pos = output.find('|');
+        std::string windowName;
         if (pos == std::string::npos)
-            return output;                                  // no |, return full string
-        return output.substr(0, pos);                       // return before |
+            windowName = output;                             // no |, return full string
+        else
+            windowName = output.substr(0, pos);             // return before |
+
+        // ----------------- Only return if contains at least one alphabet -----------------
+        bool hasAlpha = false;
+        for (char c : windowName)
+        {
+            if (std::isalpha(static_cast<unsigned char>(c)))
+            {
+                hasAlpha = true;
+                break;
+            }
+        }
+
+        if (!hasAlpha)
+            return ""; // skip window names with no letters
+
+        return windowName;
     });
 
     // Wait max 3 seconds for result

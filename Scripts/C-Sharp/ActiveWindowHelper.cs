@@ -22,45 +22,70 @@ class Program
     [DllImport("user32.dll")]
     static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
+    // ----------------- Last valid window storage -----------------
+    static string lastValid = "";
+
     static void Main()
     {
         string output = "";
-        var task = Task.Run(() => GetActiveWindow()); //Create a get ctive window task
-                                                      //Because if win32 API hangs, we may end current iteration
 
-        if (task.Wait(1000)) // wait max 1 sec
+        // Create a get active window task asynchronously
+        var task = Task.Run(() => GetActiveWindow()); 
+
+        // Wait max 1 sec for safety
+        if (task.Wait(1000)) 
         {
             output = task.Result;
         }
         else
         {
             // Timed out
-            output = "";
+            output = lastValid; // return last known window
         }
 
+        // Output to console for C++ pipe
         Console.WriteLine(output);
-        Console.Out.Flush(); // immediate flush for C++ pipe
-                             // prevents console freezes
+        Console.Out.Flush(); // immediate flush prevents console freezes
     }
 
     static string GetActiveWindow()
     {
         IntPtr hwnd = GetForegroundWindow();
         if (hwnd == IntPtr.Zero)
-            return "";
+            return lastValid; // return previous if no active window
 
-        // Filter system/UWP windows by class name
+        // Get class name
         StringBuilder className = new StringBuilder(256);
         GetClassName(hwnd, className, className.Capacity);
         string cls = className.ToString();
 
-        //Skip system processed
-        if (cls == "ApplicationFrameWindow" ||
-            cls == "Windows.UI.Core.CoreWindow" ||
-            cls == "ImmersiveShell")
-            return "";
+        // ----------------- Skip system / UWP / hidden / minimized windows -----------------
+        // This is a hardcoded list of known system window classes
+        string[] skipClasses = new string[]
+        {
+            "ApplicationFrameWindow",   // UWP windows
+            "Windows.UI.Core.CoreWindow",
+            "ImmersiveShell",
+            "DV2ControlHost",           // modern overlay
+            "Button",                   // Start menu / search buttons
+            "Shell_TrayWnd",            // Taskbar
+            "Progman",                  // desktop shell
+            "WorkerW",                  // desktop wallpaper hosts
+            "SysShadow",                // visual shadows
+            "Windows.UI.Composition.DesktopWindow", // some overlays
+            "MsgrIMEWindowClass",       // hidden IME windows
+            "Internet Explorer_Server", // IE hidden windows
+            "ApplicationFrameWindow",
+            "Tooltips_Class32"          // tooltips
+        };
 
-        // Window title safely
+        foreach (var s in skipClasses)
+        {
+            if (cls == s)
+                return lastValid; // keep previous if this is system/overlay
+        }
+
+        // ----------------- Window title safely -----------------
         string title = "";
         try
         {
@@ -72,21 +97,33 @@ class Program
                 title = sb.ToString();
             }
         }
-        catch { title = ""; }
+        catch 
+        { 
+            title = ""; 
+        }
 
-        // Process name  (if possible)
+        // ----------------- Process name safely -----------------
         string procName = "";
         try
         {
-            uint pid; // declare before
-            //Get proccess by pid
+            uint pid;
             GetWindowThreadProcessId(hwnd, out pid);
             var proc = Process.GetProcessById((int)pid);
             procName = proc.ProcessName;
         }
-        catch { procName = ""; }
+        catch 
+        { 
+            procName = ""; 
+        }
 
-        //Return with  "|" important so we can seperate in the c++ GetCurrentWindow.cpp while outputting
-        return procName + "|" + title;
+        // ----------------- Compose output -----------------
+        // "|" important to separate process name and title in C++ code
+        string result = procName + "|" + title;
+
+        // Update last valid window
+        if (!string.IsNullOrWhiteSpace(result))
+            lastValid = result;
+
+        return lastValid; // always return last valid to C++
     }
 }
