@@ -3,4 +3,4 @@
 #include <iostream>
 #include <SDL.h>
 
-void createWindow();
+int createWindow();

@@ -21,7 +21,7 @@ set(IMGUI_SRC
     external/imgui/imgui_tables.cpp
     external/imgui/imgui_widgets.cpp
     external/imgui/backends/imgui_impl_sdl2.cpp
-    external/imgui/backends/imgui_impl_opengl3.cpp   # use OpenGL if needed
+    external/imgui/backends/imgui_impl_sdlrenderer2.cpp
 )
 
 # Combine all sources

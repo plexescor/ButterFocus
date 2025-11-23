@@ -8,7 +8,8 @@
                 "C:/Libraries/SDL2/include",
                 "${workspaceFolder}/external",
                 "${workspaceFolder}/Scripts/MainGUI/HEADERS",
-                "${workspaceFolder}/Scripts/WindowTrackerAndShit/Headers"
+                "${workspaceFolder}/Scripts/WindowTrackerAndShit/Headers",
+                "${workspaceFolder}/external/imgui"
             ],
             "defines": [
                 "_DEBUG",

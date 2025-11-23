@@ -17,7 +17,7 @@ std::string getCurrentWindow()
         char buffer[256];
         std::string output;
 
-        while (fgets(buffer, sizeof(buffer), pipe) != nullptr) //context nullptr = \0 (end of string)
+        while (fgets(buffer, sizeof(buffer), pipe) != nullptr) //context: nullptr = \0 (end of string)
         {
             output += buffer;                                // append every line
         }

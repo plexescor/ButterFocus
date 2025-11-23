@@ -1,8 +1,9 @@
-#define SDL_MAIN_HANDLED
 #include <iostream>
 #include <SDL.h>
 
-void createWindow()
+int width = 800, height = 600;
+
+int createWindow()
 {
-    std::cout<<"HI";
+    
 }
