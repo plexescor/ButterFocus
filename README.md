@@ -1,5 +1,4 @@
 (Written by AI, but will adhere to it)
-
 ---
 
 # ViraChrono ⚡
@@ -39,7 +38,7 @@ That’s all for now. Everything else is upcoming. But don’t underestimate thi
 ## Upcoming Features 🌟
 * **Local Storage.** – Storage of data in disk (optimized I/O).
 * **Accurate AF** – Improved accuracy, precision.
-* **SDL GUI & Visualizations** – Beautiful charts, heatmaps, and interactive dashboards.
+* **SDL GUI & imGUI visualization** – Beautiful charts, heatmaps, and interactive dashboards.
 * **PDF Report Export** – Generate offline reports of your focus patterns.
 * **Linux Support** – Cross-platform build via CMake.
 * **Event Pattern Detection** – Identify repetitive loops, distractions, and workflow patterns.
@@ -54,7 +53,8 @@ That’s all for now. Everything else is upcoming. But don’t underestimate thi
 * **C++** – Pure, compiled power for performance and efficiency.
 * **C#** – For stable Win32 API calls.
 * **Win32 API** – Precise system-level tracking of active windows and task switches.
-* **SDL2** – Lightweight GUI foundation for future visualizations.
+* **SDL2** – Lightweight window and rendering foundation for smooth windows.
+* **imGUI** – Performant and efficient GUI foundation for future visualizations.
 * **CMake** – Clean, reproducible builds for cross-platform expansion.
 
 > No bloated runtimes, no Electron, no Python. Just pure performance and minimal footprint.
@@ -89,7 +89,8 @@ ViraChrono is for those who **want control over their digital self**, without sa
 ***WINDOWS**
 [YOU NEED .NET SDK TO COMPILE C# FILES AND G++(OR MSVC), BUT MSVC PREFERRED]
 1. Clone the repo.
-2. Run **"rebuild.bat"**
+2. **Download SDL2 and imgui and place the parent folders in "{project_root}/external"**
+3. Run **"rebuild.bat"** (preferably through "x64 Native Tools Command Prompt for VS")
 4. Run **compiled/ViraChrono.exe**.
 
 That’s it. ViraChrono will start logging active windows and switches silently, letting you focus on **what you actually do**.
@@ -100,7 +101,7 @@ That’s it. ViraChrono will start logging active windows and switches silently,
 
 ## Notes for Hardcore Devs 💻
 
-* Minimal dependencies: **SDL2 + Win32 API** only.
+* Minimal dependencies: **SDL2 + imGUI + Win32 API(windows)** only.
 * Only **C#** and **C++** Codebase.
 * Designed for ultra-low resource usage without sacrificing functionality.
 * Current implementation is **fully functional** as a core focus tracker.
