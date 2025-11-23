@@ -2,7 +2,7 @@
 #include <iostream>
 #include <SDL.h>
 
-void createWindow(std::string windowName)
+void createWindow()
 {
-    std::cout<<windowName;
+    std::cout<<"HI";
 }

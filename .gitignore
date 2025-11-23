@@ -23,7 +23,7 @@ Makefile
 *.sln
 
 # VS Code files
-.vscode/
+# .vscode/
 
 # OS files
 Thumbs.db

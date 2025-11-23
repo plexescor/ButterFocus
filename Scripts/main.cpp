@@ -11,50 +11,56 @@
 // Conditional compilation for Windows-specific code
 #ifdef _WIN32
 
-    std::mutex mtx;
+    std::mutex mtx;//LOCKING SHIT
     std::string prevWindow;
-    std::string sharedWindow;
-    std::atomic<bool> quit(false);
 
-    void WindowWorker()
+    std::string sharedWindow;
+    int swicthesG = -1; //G -> global
+    std::atomic<bool> quit(false); //The exit conditon for app
+
+    void WindowWorker() //Worker running on worker thread
     {
         while (!quit)
         {
-            std::string window = getCurrentWindow();
-            if (!window.empty() 
-            && window.find_first_not_of(' ') != std::string::npos
+            std::string window = getCurrentWindow(); //get currrent window
+            if (!window.empty()  //Some checks
+            && window.find_first_not_of(' ') != std::string::npos //idk, chatgpt suggested
             && window != "SearchApp" 
             && window != "explorer"
             && window != prevWindow)
             {
-                std::lock_guard<std::mutex> lock(mtx);
+                std::lock_guard<std::mutex> lock(mtx);//Lock before modifyig
                 sharedWindow = window;
-                prevWindow = window;
+                prevWindow = window;//I dont need to explain
+                swicthesG++;
             }          
-            std::this_thread::sleep_for(std::chrono::milliseconds(300)); 
+            std::this_thread::sleep_for(std::chrono::milliseconds(300)); //sleep to not hammer the cpu
         }
     }
     
     int main()
     {
-        std::thread worker(WindowWorker);
+        createWindow(); //Call the create window function
+        std::thread worker(WindowWorker); //Create a new thread 
         
         std::string lastPrintedWindow;
 
         while (true) 
         {
             std::string current;
-            {
+            int switchesS; //S -> Scoped
+            { //Keep these brackets
                 std::lock_guard<std::mutex> lock(mtx);
-                current = sharedWindow;
+                current = sharedWindow; //Lock before reading
+                switchesS = swicthesG;
             }
 
-            if (!current.empty() && current != lastPrintedWindow) {
-                std::cout << "Current window: " << current << std::endl;
+            if (!current.empty() && current != lastPrintedWindow) 
+            {
                 lastPrintedWindow = current;
             }
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));//zzzzzzzzzzzzzzzzzzz
         }
     }
 

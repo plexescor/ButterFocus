@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/Scripts**",
+                "C:/Libraries/SDL2/include",
+                "${workspaceFolder}/external",
+                "${workspaceFolder}/Scripts/MainGUI/HEADERS",
+                "${workspaceFolder}/Scripts/WindowTrackerAndShit/Headers"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ]
+        }
+    ],
+    "version": 4
+}
